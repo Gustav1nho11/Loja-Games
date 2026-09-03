@@ -3,182 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="PixelVault - A sua loja de games com recomendador interativo de jogos.">
-  <title>PixelVault | Loja de Games & Recomendador</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>SavePoint Games - Catálogo</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="container">
+    <aside class="sidebar">
+      <h2>Filtros</h2>
+      <div class="filter-group">
+        <h3>Plataforma</h3>
+        <label><input type="checkbox" class="filter-check" data-type="plataforma" value="PS5"> PlayStation 5</label>
+        <label><input type="checkbox" class="filter-check" data-type="plataforma" value="PC"> PC</label>
+        <label><input type="checkbox" class="filter-check" data-type="plataforma" value="Switch"> Nintendo Switch</label>
+      </div>
+      <div class="filter-group">
+        <h3>Gênero</h3>
+        <label><input type="checkbox" class="filter-check" data-type="genero" value="RPG"> RPG</label>
+        <label><input type="checkbox" class="filter-check" data-type="genero" value="Ação"> Ação</label>
+        <label><input type="checkbox" class="filter-check" data-type="genero" value="Indie"> Indie</label>
+      </div>
+    </aside>
 
-  <header class="main-header">
-    <div class="container header-content">
-      <a href="#" class="logo">
-        <span>Pixel</span>Vault
-      </a>
-
-      <div class="search-bar">
-        <input type="text" placeholder="Buscar jogos, consoles, acessórios..." aria-label="Buscar produtos">
-        <button type="submit" aria-label="Pesquisar">🔍</button>
+    <main class="content">
+      <div class="tags-bar">
+        <div id="active-tags"></div>
+        <button id="clear-all" class="btn-clear" style="display: none;">Limpar Filtros</button>
       </div>
 
-      <nav class="main-nav">
-        <ul>
-          <li><a href="#catalog">Catálogo</a></li>
-          <li><a href="#quiz-section">Descubra seu Jogo</a></li>
-          <li><a href="#deals">Ofertas</a></li>
-        </ul>
-      </nav>
-
-      <div class="user-actions">
-        <button class="cart-btn" aria-label="Carrinho de Compras">
-          🛒 <span id="cart-count" class="cart-count">0</span>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <section class="hero-banner">
-    <div class="container">
-      <div class="hero-text">
-        <span class="tag-highlight">Lançamento</span>
-        <h1>Encontre seu próximo jogo favorito em segundos</h1>
-        <p>Responda ao nosso quiz rápido ou explore as melhores promoções da semana.</p>
-        <a href="#quiz-section" class="btn-primary">Fazer o Quiz</a>
-      </div>
-    </div>
-  </section>
-
-  <main class="container">
-
-    <section id="quiz-section" class="quiz-wrapper">
-      <header class="section-title">
-        <h2>Quiz: Descubra seu Próximo Jogo</h2>
-        <p>Selecione suas preferências para receber uma recomendação sob medida.</p>
-      </header>
-
-      <div id="quiz-container">
-        <div id="question-box">
-          <h3 id="question-title">Carregando perguntas...</h3>
-          <div id="options-container" class="options-grid"></div>
-        </div>
-
-        <div id="result-box" class="result-box" style="display: none;">
-          <span class="badge-match">98% de Match com você</span>
-          <h2>Sua Recomendação Ideal</h2>
-          
-          <div id="product-card" class="featured-recommendation"></div>
-
-          <div class="result-actions">
-            <button class="btn-secondary" onclick="resetQuiz()">Refazer Quiz</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <hr class="divider">
-
-    <section id="catalog" class="catalog-section">
-      <header class="section-title">
-        <h2>Catálogo de Jogos</h2>
-      </header>
-
-      <div class="catalog-layout">
-        <aside class="filters-sidebar">
-          <h3>Filtros</h3>
-          
-          <div class="filter-group">
-            <h4>Plataforma</h4>
-            <label><input type="checkbox" name="platform" value="pc"> PC</label>
-            <label><input type="checkbox" name="platform" value="ps5"> PlayStation 5</label>
-            <label><input type="checkbox" name="platform" value="xbox"> Xbox Series X/S</label>
-            <label><input type="checkbox" name="platform" value="switch"> Nintendo Switch</label>
-          </div>
-
-          <div class="filter-group">
-            <h4>Gênero</h4>
-            <label><input type="checkbox" name="genre" value="rpg"> RPG</label>
-            <label><input type="checkbox" name="genre" value="action"> Ação / Aventura</label>
-            <label><input type="checkbox" name="genre" value="indie"> Indie / Relaxante</label>
-          </div>
-
-          <div class="filter-group">
-            <h4>Preço Máximo</h4>
-            <input type="range" id="price-range" min="20" max="350" step="10">
-            <span id="price-value">Até R$ 350,00</span>
-          </div>
-        </aside>
-
-        <div class="products-grid" id="products-grid">
-          <article class="product-card">
-            <span class="badge-promo">-30%</span>
-            <img src="https://via.placeholder.com/300x180" alt="Capa do Jogo Street Fighter 6">
-            <div class="product-info">
-              <span class="product-platform">PC / PS5 / Xbox</span>
-              <h3 class="product-title">Street Fighter 6</h3>
-              <div class="product-price-box">
-                <span class="price-old">R$ 249,00</span>
-                <span class="product-price">R$ 174,30</span>
-              </div>
-              <button class="btn-buy">Adicionar ao Carrinho</button>
-            </div>
-          </article>
-
-          <article class="product-card">
-            <img src="https://via.placeholder.com/300x180" alt="Capa do Jogo Hades II">
-            <div class="product-info">
-              <span class="product-platform">PC</span>
-              <h3 class="product-title">Hades II</h3>
-              <div class="product-price-box">
-                <span class="product-price">R$ 88,99</span>
-              </div>
-              <button class="btn-buy">Adicionar ao Carrinho</button>
-            </div>
-          </article>
-
-          <article class="product-card">
-            <img src="https://via.placeholder.com/300x180" alt="Capa do Jogo Stardew Valley">
-            <div class="product-info">
-              <span class="product-platform">PC / Switch / Mobile</span>
-              <h3 class="product-title">Stardew Valley</h3>
-              <div class="product-price-box">
-                <span class="product-price">R$ 27,99</span>
-              </div>
-              <button class="btn-buy">Adicionar ao Carrinho</button>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <footer class="main-footer">
-    <div class="container footer-content">
-      <div class="footer-col">
-        <h4><span>Pixel</span>Vault</h4>
-        <p>Sua loja especializada em jogos digitais, hardware e periféricos.</p>
-      </div>
-
-      <div class="footer-col">
-        <h4>Navegação</h4>
-        <ul>
-          <li><a href="#catalog">Catálogo</a></li>
-          <li><a href="#quiz-section">Quiz Recomendador</a></li>
-          <li><a href="#">Termos de Uso</a></li>
-          <li><a href="#">Política de Privacidade</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h4>Formas de Pagamento</h4>
-        <p>PIX, Cartão de Crédito, Boleto Bancário</p>
-      </div>
-    </div>
-
-    <div class="footer-bottom">
-      <p>&copy; 2026 PixelVault. Todos os direitos reservados.</p>
-    </div>
-  </footer>
-
+      <p class="counter">Exibindo <span id="game-count">0</span> jogos</p>
+      <div class="games-grid" id="games-grid"></div>
+    </main>
+  </div>
   <script src="script.js"></script>
 </body>
 </html>
