@@ -1,90 +1,72 @@
-// Dados do Quiz e Produtos
-const questions = [
-  {
-    title: "Quanto tempo você tem disponível para jogar?",
-    options: [
-      { text: "Pouco tempo (até 30 min/dia)", tag: "short" },
-      { text: "Moderado (1 a 2 horas)", tag: "medium" },
-      { text: "Imersão total (sessões longas)", tag: "long" }
-    ]
-  },
-  {
-    title: "Qual estilo de experiência você busca hoje?",
-    options: [
-      { text: "Desafio e Adrenalina", tag: "action" },
-      { text: "Desconectar e Relaxar", tag: "cozy" },
-      { text: "Uma Boa História", tag: "story" }
-    ]
-  }
+const games = [
+  { id: 1, title: 'Elden Ring', plataforma: 'PS5', genero: 'RPG', price: 'R$ 249,00' },
+  { id: 2, title: 'Cyberpunk 2077', plataforma: 'PC', genero: 'RPG', price: 'R$ 199,00' },
+  { id: 3, title: 'Hollow Knight', plataforma: 'PC', genero: 'Indie', price: 'R$ 46,99' },
+  { id: 4, title: 'Zelda: Tears of the Kingdom', plataforma: 'Switch', genero: 'Ação', price: 'R$ 349,00' },
+  { id: 5, title: 'God of War Ragnarök', plataforma: 'PS5', genero: 'Ação', price: 'R$ 299,00' }
 ];
 
-const products = {
-  "short-action": { name: "Street Fighter 6", price: "R$ 249,00", platform: "PC / PS5 / Xbox" },
-  "short-cozy": { name: "Unpacking", price: "R$ 37,99", platform: "PC / Switch" },
-  "short-story": { name: "What Remains of Edith Finch", price: "R$ 49,00", platform: "PC / Consoles" },
-  "medium-action": { name: "Hades II", price: "R$ 88,99", platform: "PC" },
-  "medium-cozy": { name: "Stardew Valley", price: "R$ 27,99", platform: "PC / Switch / Mobile" },
-  "medium-story": { name: "The Last of Us Part I", price: "R$ 249,90", platform: "PC / PS5" },
-  "long-action": { name: "Elden Ring", price: "R$ 229,90", platform: "PC / Consoles" },
-  "long-cozy": { name: "Animal Crossing: New Horizons", price: "R$ 299,00", platform: "Nintendo Switch" },
-  "long-story": { name: "The Witcher 3: Wild Hunt", price: "R$ 79,99", platform: "PC / Consoles" }
-};
+const checkboxes = document.querySelectorAll('.filter-check');
+const activeTagsContainer = document.getElementById('active-tags');
+const clearAllBtn = document.getElementById('clear-all');
+const gamesGrid = document.getElementById('games-grid');
+const gameCount = document.getElementById('game-count');
 
-let currentQuestion = 0;
-let userTags = [];
+function update() {
+  const activeFilters = Array.from(checkboxes)
+    .filter(input => input.checked)
+    .map(input => ({ type: input.dataset.type, value: input.value, element: input }));
 
-function renderQuestion() {
-  const q = questions[currentQuestion];
-  document.getElementById('question-title').innerText = q.title;
-  
-  const container = document.getElementById('options-container');
-  container.innerHTML = '';
+  renderTags(activeFilters);
+  renderGames(activeFilters);
+}
 
-  q.options.forEach(opt => {
-    const btn = document.createElement('button');
-    btn.className = 'btn-option';
-    btn.innerText = opt.text;
-    btn.onclick = () => selectOption(opt.tag);
-    container.appendChild(btn);
+function renderTags(filters) {
+  activeTagsContainer.innerHTML = '';
+  clearAllBtn.style.display = filters.length > 0 ? 'inline-block' : 'none';
+
+  filters.forEach(filter => {
+    const tag = document.createElement('span');
+    tag.className = 'tag';
+    tag.innerHTML = `${filter.type}: ${filter.value} <button>&times;</button>`;
+    
+    tag.querySelector('button').addEventListener('click', () => {
+      filter.element.checked = false;
+      update();
+    });
+
+    activeTagsContainer.appendChild(tag);
   });
 }
 
-function selectOption(tag) {
-  userTags.push(tag);
-  currentQuestion++;
+function renderGames(filters) {
+  const filteredGames = games.filter(game => {
+    if (filters.length === 0) return true;
+    return filters.some(f => game[f.type] === f.value);
+  });
 
-  if (currentQuestion < questions.length) {
-    renderQuestion();
-  } else {
-    showResult();
+  gameCount.textContent = filteredGames.length;
+  
+  if (filteredGames.length === 0) {
+    gamesGrid.innerHTML = '<p style="grid-column: 1/-1; color: #a8a8b3;">Nenhum jogo encontrado com os filtros selecionados.</p>';
+    return;
   }
-}
 
-function showResult() {
-  document.getElementById('question-box').style.display = 'none';
-  document.getElementById('result-box').style.display = 'block';
-
-  // Cria a chave combinando as tags selecionadas (ex: "short-action")
-  const key = userTags.join('-');
-  const match = products[key] || { name: "Jogo Recomendado", price: "R$ 99,00", platform: "Todas" };
-
-  document.getElementById('product-card').innerHTML = `
-    <div class="product-card">
-      <h3>${match.name}</h3>
-      <p style="color: #a8a8b3;">Plataforma: ${match.platform}</p>
-      <p class="product-price">${match.price}</p>
-      <button class="buy-btn">Adicionar ao Carrinho</button>
+  gamesGrid.innerHTML = filteredGames.map(game => `
+    <div class="card">
+      <h4>${game.title}</h4>
+      <p>Plataforma: ${game.plataforma}</p>
+      <p>Gênero: ${game.genero}</p>
+      <div class="price">${game.price}</div>
     </div>
-  `;
+  `).join('');
 }
 
-function resetQuiz() {
-  currentQuestion = 0;
-  userTags = [];
-  document.getElementById('question-box').style.display = 'block';
-  document.getElementById('result-box').style.display = 'none';
-  renderQuestion();
-}
+checkboxes.forEach(input => input.addEventListener('change', update));
 
-// Inicializa o quiz ao carregar a página
-renderQuestion();
+clearAllBtn.addEventListener('click', () => {
+  checkboxes.forEach(input => input.checked = false);
+  update();
+});
+
+update();
